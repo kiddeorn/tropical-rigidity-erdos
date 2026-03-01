@@ -18,8 +18,8 @@ The Python script requires no external libraries (uses standard `fractions` and 
 pip install sympy
 ```
 
-+ U_3 Valuation Tracker (AP-4 Evidence)Simulates the valuation grading transitions under $A_3$ quiver mutations to confirm the Leading-Term Non-Vanishing (LTNV) condition.Estimated Execution Time: ~2 
-seconds.
+## U_3 Valuation Tracker (AP-4 Evidence)Simulates the valuation grading transitions under $A_3$ quiver mutations to confirm the Leading-Term Non-Vanishing (LTNV) condition. 
+Estimated Execution Time: ~2 seconds. 
 Execution:
 ```Bash
 python3 u3_valuation_tracker.py
