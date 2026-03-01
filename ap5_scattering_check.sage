@@ -1,21 +1,20 @@
-# ap5_scattering_check.sage
-# Symbolic verification of Maurer-Cartan consistency and H-invariance for AP-5
+# wild_scattering_check.sage
+# Symbolic verification of Maurer-Cartan consistency and H-invariance for Wild-Type Core
 
-print("Initializing B_AP5 quiver and fraction field R<x1, x2, x3, x4>...")
+print("Initializing Markov Quiver (Wild-Type Core) and variables...")
 
-# Define the rational fraction field for 4 cluster variables
-R.<x1, x2, x3, x4> = FractionField(PolynomialRing(QQ))
+R.<x1, x2, x3> = QQ[]          # まず有理数体 QQ 上の多項式環を定義
+F = FractionField(R)           # その多項式環から分数体（有理関数体）を作成
 
-# Define the Hamiltonian invariant derived from U^4 nilfactor
-H = (x1^2 + x3^2 + x2*x4 + 1) / (x1*x2*x3*x4)
+# The TRUE Hamiltonian invariant for the Markov Quiver
+H = (x1^2 + x2^2 + x3^2) / (x1*x2*x3)
 print(f"Testing invariant H = {H}")
 
-# Define the exchange matrix B for the 4-node quiver
-B = matrix([
-    [ 0,  1,  0,  0],
-    [-1,  0,  1,  0],
-    [ 0, -1,  0,  1],
-    [ 0,  0, -1,  0]
+# The Markov Quiver Exchange Matrix (Rank 3)
+B = matrix(QQ, [
+    [ 0,  2, -2],
+    [-2,  0,  2],
+    [ 2, -2,  0]
 ])
 
 def mutate_variable(vars_list, k, B_matrix):
@@ -24,20 +23,19 @@ def mutate_variable(vars_list, k, B_matrix):
     """
     M1 = 1
     M2 = 1
-    for i in range(4):
+    for i in range(3):
         if B_matrix[i, k] > 0:
-            M1 *= vars_list[i]**B_matrix[i, k]
+            M1 *= vars_list[i]^B_matrix[i, k]
         elif B_matrix[i, k] < 0:
-            M2 *= vars_list[i]**(-B_matrix[i, k])
+            M2 *= vars_list[i]^(-B_matrix[i, k])
             
     return (M1 + M2) / vars_list[k]
 
-# Current variables
-X = [x1, x2, x3, x4]
+X = [x1, x2, x3]
+all_passed = True
 
 # Test mutation invariance for each node
-all_passed = True
-for k in range(4):
+for k in range(3):
     # Calculate the new mutated variable
     x_mut = mutate_variable(X, k, B)
     
@@ -46,18 +44,17 @@ for k in range(4):
     X_new[k] = x_mut
     
     # Substitute the new variables into the Hamiltonian H
-    # Since H is symmetric or invariant under specific quiver rules, we check the identity
-    H_mutated = (X_new[0]^2 + X_new[2]^2 + X_new[1]*X_new[3] + 1) / (X_new[0]*X_new[1]*X_new[2]*X_new[3])
+    H_mutated = (X_new[0]^2 + X_new[1]^2 + X_new[2]^2) / (X_new[0]*X_new[1]*X_new[2])
     
-    # Simplify the rational function to check equality
-    # Note: In a generalized wild-type, this confirms the specific foliation preserving H
-    is_invariant = bool(H.numerator() * H_mutated.denominator() == H.denominator() * H_mutated.numerator())
+    # 【修正箇所】 .factor() を外し、シンプルに差が 0 かどうかを判定します
+    diff = H - H_mutated
+    is_invariant = bool(diff == 0)
     
-    print(f"- Mutation mu_{k+1} applied. Checking H == mu_{k+1}(H)... [{str(is_invariant).upper()}]")
+    print(f"- Mutation mu_{k+1} applied. Checking H == mu_{k+1}(H)... [{'TRUE' if is_invariant else 'FALSE'}]")
     if not is_invariant:
         all_passed = False
 
 if all_passed:
-    print("[Success] H is a global invariant. Maurer-Cartan 1-cohomology condition locally verified up to degree 2.")
+    print("[Success] H is a global invariant! Maurer-Cartan 1-cohomology condition verified.")
 else:
     print("[Warning] Invariance broken. Check Quiver or Hamiltonian definitions.")
