@@ -35,9 +35,15 @@ mu_3,          (0, 1, 2),      (0, 1,-1),       PASS,       -3.000
 [Success] All 15 trajectories verified. The algebraic entropy lambda converges to 0.
 ```
 
-## AP-5 Wild-Type Invariance CheckSymbolically verifies the mutation invariance of the $U_4$-nilfactor Hamiltonian $H$ and evaluates the finite truncation of the path-ordered product.Estimated Execution Time: ~45 seconds (depending on symbolic expansion depth).Execution:Bashsage ap5_scattering_check.sage
-```bash
-Expected Output (Excerpt):PlaintextInitializing B_AP5 quiver and fraction field R<x1, x2, x3, x4>...
+## AP-5 Wild-Type Invariance CheckSymbolically verifies the mutation invariance of the $U_4$-nilfactor Hamiltonian $H$ and evaluates the finite truncation of the path-ordered product. 
+Estimated Execution Time: ~45 seconds (depending on symbolic expansion depth). 
+Execution:
+```Bash
+sage ap5_scattering_check.sage
+```
+Expected Output (Excerpt):
+```
+Initializing B_AP5 quiver and fraction field R<x1, x2, x3, x4>...
 Testing invariant H = (x1^2 + x3^2 + x2*x4 + 1) / (x1*x2*x3*x4)
 - Mutation mu_1 applied. Checking H == mu_1(H)... [TRUE]
 - Mutation mu_2 applied. Checking H == mu_2(H)... [TRUE]
